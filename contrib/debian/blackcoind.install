@@ -1,2 +1,2 @@
-debian/bin/blackcoind usr/bin
-src/blackcoind usr/lib/blackcoin
+debian/bin/chavezcoind usr/bin
+src/chavezcoind usr/lib/chavezcoin
