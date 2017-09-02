@@ -49,12 +49,12 @@ public:
         // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
         // a large 4-byte int at any alignment.
         pchMessageStart[0] = 0x70;
-        pchMessageStart[1] = 0x35;
-        pchMessageStart[2] = 0x22;
-        pchMessageStart[3] = 0x05;
-        vAlertPubKey = ParseHex("0486bce1bac0d543f104cbff2bd23680056a3b9ea05e1137d2ff90eeb5e08472eb500322593a2cb06fbf8297d7beb6cd30cb90f98153b5b7cce1493749e41e0284");
-        nDefaultPort = 15714;
-        nRPCPort = 15715;
+        pchMessageStart[1] = 0x61;
+        pchMessageStart[2] = 0x6e;
+        pchMessageStart[3] = 0x61;
+        vAlertPubKey = ParseHex("4d616475726f20736520746520766120612061636162617220656c207265696e61646f20706170752c2063616d62696172656d6f7320656c2073697374656d612e");
+        nDefaultPort = 47047;
+        nRPCPort = 47048;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 20);
 
         // Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -65,7 +65,7 @@ public:
         //    CTxIn(COutPoint(0000000000, 4294967295), coinbase 00012a24323020466562203230313420426974636f696e2041544d7320636f6d6520746f20555341)
         //    CTxOut(empty)
         //  vMerkleTree: 12630d16a9
-        const char* pszTimestamp = "20 Feb 2014 Bitcoin ATMs come to USA";
+        const char* pszTimestamp = "A new economy just begin to Venezuela - 2017";
         std::vector<CTxIn> vin;
         vin.resize(1);
         vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -77,16 +77,50 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime    = 1393221600;
+        genesis.nTime    = 1504311187;
         genesis.nBits    = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce   = 164482;
+        genesis.nNonce   = 0;
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x000001faef25dec4fbcf906e6242621df2c183bf232f263d0ba5b101911e4563"));
-        assert(genesis.hashMerkleRoot == uint256("0x12630d16a97f24b287c8c2594dda5fb98c9e6c70fc61d44191931ea2aa08dc90"));
 
-        vSeeds.push_back(CDNSSeedData("vasin.nl", "dnsseed.vasin.nl"));
-        vSeeds.push_back(CDNSSeedData("vps.joshuajbouw.com", "dnsseed.joshuajbouw.com"));
+        // ##################################################### //
+        if (true && genesis.GetHash() != hashGenesisBlock)
+        {
+            printf("Searching for genesis block...\n");
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
+            uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+            uint256 thash;
+            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+
+            loop
+            {
+                scrypt_1024_1_1_256_sp(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
+                if (thash <= hashTarget)
+                    break;
+                if ((genesis.nNonce & 0xFFF) == 0)
+                {
+                    printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                }
+                ++genesis.nNonce;
+                if (genesis.nNonce == 0)
+                {
+                    printf("NONCE WRAPPED, incrementing time\n");
+                    ++genesis.nTime;
+                }
+            }
+            printf("genesis.nTime = %u \n", genesis.nTime);
+            printf("genesis.nNonce = %u \n", genesis.nNonce);
+            printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+
+        }
+        // ##################################################### //
+
+        assert(hashGenesisBlock == uint256("0x"));
+        assert(genesis.hashMerkleRoot == uint256("0x"));
+
+        vSeeds.push_back(CDNSSeedData("seed_3", "192.189.25.192"));
+        vSeeds.push_back(CDNSSeedData("seed_4", "192.189.25.191"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 25);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 85);
