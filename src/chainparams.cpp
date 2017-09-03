@@ -84,40 +84,22 @@ public:
         hashGenesisBlock = genesis.GetHash();
 
         // ##################################################### //
-        if (true && genesis.GetHash() != hashGenesisBlock)
-        {
-            printf("Searching for genesis block...\n");
-            // This will figure out a valid hash and Nonce if you're
-            // creating a different genesis block:
-            uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-            uint256 thash;
-            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
 
-            loop
-            {
-                scrypt_1024_1_1_256_sp(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
-                if (thash <= hashTarget)
-                    break;
-                if ((genesis.nNonce & 0xFFF) == 0)
-                {
-                    printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-                }
-                ++genesis.nNonce;
-                if (genesis.nNonce == 0)
-                {
-                    printf("NONCE WRAPPED, incrementing time\n");
-                    ++genesis.nTime;
-                }
-            }
-            printf("genesis.nTime = %u \n", genesis.nTime);
-            printf("genesis.nNonce = %u \n", genesis.nNonce);
-            printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-
-        }
+          // try
+          // {
+          //   throw 20;
+          // }
+          // catch (int e)
+          // {
+          //   cout << "genesis.nTime = " << genesis.nTime << '\n';
+          //   cout << "genesis.nNonce = " << genesis.nNonce << '\n';
+          //   cout << "genesis.GetHash = " << genesis.GetHash().ToString().c_str() << '\n';
+          //   cout << "genesis.BuildMerkleTree = " << genesis.BuildMerkleTree().ToString().c_str() << '\n';
+          // }
         // ##################################################### //
 
-        assert(hashGenesisBlock == uint256("0x"));
-        assert(genesis.hashMerkleRoot == uint256("0x"));
+        assert(hashGenesisBlock == uint256("0x0176710c14730d9b5a712bb65cf54610460f87dabe1e6bec7f3d99489a196e9e"));
+        assert(genesis.hashMerkleRoot == uint256("0xa0a801256bd018c42327814494263229f42819d7cbca65a9678964230bace84e"));
 
         vSeeds.push_back(CDNSSeedData("seed_3", "192.189.25.192"));
         vSeeds.push_back(CDNSSeedData("seed_4", "192.189.25.191"));
@@ -170,7 +152,7 @@ public:
         genesis.nBits  = bnProofOfWorkLimit.GetCompact();
         genesis.nNonce = 216178;
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x0000724595fb3b9609d441cbfb9577615c292abf07d996d3edabc48de843642d"));
+        // assert(hashGenesisBlock == uint256("0x0000724595fb3b9609d441cbfb9577615c292abf07d996d3edabc48de843642d"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -207,7 +189,7 @@ public:
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 18444;
         strDataDir = "regtest";
-        assert(hashGenesisBlock == uint256("0x523dda6d336047722cbaf1c5dce622298af791bac21b33bf6e2d5048b2a13e3d"));
+        // assert(hashGenesisBlock == uint256("0x523dda6d336047722cbaf1c5dce622298af791bac21b33bf6e2d5048b2a13e3d"));
 
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
     }
